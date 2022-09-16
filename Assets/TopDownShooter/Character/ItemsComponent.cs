@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 struct Ammo
 {
     public int PistolAmmo;
@@ -21,7 +22,7 @@ public class ItemsComponent : MonoBehaviour
     public void Start()
     {
         ammo.PistolAmmo = defaultNumberOfAmmo;
-        ammo.AutoRifleAmmo = 0;
+        ammo.AutoRifleAmmo = defaultNumberOfAmmo;
         ammo.ShotgunAmmo = defaultNumberOfAmmo;
         ammo.MachineGunAmmo = defaultNumberOfAmmo;
         ammo.SniperRifleAmmo = defaultNumberOfAmmo;
@@ -33,8 +34,6 @@ public class ItemsComponent : MonoBehaviour
         switch (typeOfWeapon)
         {
             case TypeOfWeapon.Pistol:
-                // Debug.Log(ammo.PistolAmmo);
-                // Debug.Log(typeOfWeapon);
                 return ammo.PistolAmmo;
             case TypeOfWeapon.AutoRifle:
                 return ammo.AutoRifleAmmo;
@@ -46,6 +45,30 @@ public class ItemsComponent : MonoBehaviour
                 return ammo.SniperRifleAmmo;
             default:
                 return 0;
+        }
+    }
+
+
+    public void RemoveAmmoFromInvertory(TypeOfWeapon typeOfWeapon, int NumbersOfRemoveInventory = 1)
+    {
+        Debug.Log(typeOfWeapon + ", " + ammo.PistolAmmo);
+        switch (typeOfWeapon)
+        {
+            case TypeOfWeapon.Pistol:
+                ammo.PistolAmmo -= NumbersOfRemoveInventory;
+                return;
+            case TypeOfWeapon.AutoRifle:
+                ammo.AutoRifleAmmo -= NumbersOfRemoveInventory;
+                return;
+            case TypeOfWeapon.Shotgun:
+                ammo.ShotgunAmmo -= NumbersOfRemoveInventory;
+                return;
+            case TypeOfWeapon.MachineGun:
+                ammo.MachineGunAmmo -= NumbersOfRemoveInventory;
+                return;
+            case TypeOfWeapon.SniperRifle:
+                ammo.SniperRifleAmmo -= NumbersOfRemoveInventory;
+                return;
         }
     }
 }

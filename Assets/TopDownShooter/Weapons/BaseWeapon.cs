@@ -33,8 +33,7 @@ public class BaseWeapon : MonoBehaviour
     public ShootingType shootingType;
     public ReloadType reloadType;
     public TypeOfWeapon typeOfWeapon;
-    public float fireDelay = 1;
-    public float clipReloadTime = 3;
+    public float fireDelay = 1, clipReloadTime = 3;
     public int MaxAmmoInTheClip = 5, numberOfShootInBurst;
 
 
@@ -43,19 +42,15 @@ public class BaseWeapon : MonoBehaviour
     public ItemsComponent itemsComponent;
 
 
-    public BaseWeapon()
-    {
-        ammoInTheClip = MaxAmmoInTheClip;
-    }
-
-
     void Start()
     {
+        ammoInTheClip = MaxAmmoInTheClip;
     }
     
 
     public bool CheckCanShoot()
     {
+        Debug.Log(ammoInTheClip);
         if(ammoInTheClip > 0 && canShooting && !isReloading)
         {
             return true;
@@ -135,22 +130,49 @@ public class BaseWeapon : MonoBehaviour
         int numbersOfAmmoInInventory = itemsComponent.GetAmmo(typeOfWeapon);
         if (numbersOfAmmoInInventory == 0) return;
 
+        isReloading = true;
         if (reloadType == ReloadType.clipReload)
         {
             StartCoroutine(EndClipReload(numbersOfAmmoInInventory));
+            return;
+        }
+        if (reloadType == ReloadType.oneBulletReload)
+        {
+            StartCoroutine(AddOneBullet(numbersOfAmmoInInventory));
         }
     }
 
 
     IEnumerator EndClipReload(int numbersOfAmmoInInventory)
     {
-        // Debug.Log(ammoInTheClip);
-        //get count of ammo from inventory and add thet to ammo in the clip
-        
         yield return new WaitForSeconds(clipReloadTime);
 
+        int shortageAmmoInTheClip = MaxAmmoInTheClip + 1 - ammoInTheClip;
+        int addedAmmoCounter;
+        if (shortageAmmoInTheClip <= numbersOfAmmoInInventory)
+        {
+            addedAmmoCounter = shortageAmmoInTheClip;
+        }
+        else
+        {
+            shortageAmmoInTheClip = numbersOfAmmoInInventory;
+        }
+        ammoInTheClip += shortageAmmoInTheClip;
+        itemsComponent.RemoveAmmoFromInvertory(typeOfWeapon, shortageAmmoInTheClip);
+        isReloading = false;
+    }
 
-        ammoInTheClip = 13;
-        Debug.Log(ammoInTheClip);
+
+    IEnumerator AddOneBullet(int numbersOfAmmoInInventory)
+    {
+        while (ammoInTheClip < MaxAmmoInTheClip + 1 && numbersOfAmmoInInventory > 0)
+        {
+            yield return new WaitForSeconds(clipReloadTime);
+
+            ammoInTheClip++;
+            numbersOfAmmoInInventory--;
+            itemsComponent.RemoveAmmoFromInvertory(typeOfWeapon);
+        }
+        isReloading = false;//end reloading
     }
 }
