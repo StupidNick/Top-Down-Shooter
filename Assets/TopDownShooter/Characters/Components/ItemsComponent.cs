@@ -20,7 +20,7 @@ public struct ConsumebleStruct
 
 public class ItemsComponent : MonoBehaviour
 {
-    public GameObject[] WeaponsArray; 
+    public BaseWeaponComponent[] WeaponsArray; 
     SlotWeaponEnum CurrentWeapon = SlotWeaponEnum.FirstSlot;
     ConsumebleStruct[] ConsumebleArray;
     int CurrentConsumebleIndex;
@@ -31,7 +31,13 @@ public class ItemsComponent : MonoBehaviour
     }
 
 
-    public void AddWeapon(GameObject newWeapon)
+    public void StartShootFromCurrentWeapon()
+    {
+        GetCurrentWeapon().StartShooting();
+    }
+
+
+    public void AddWeapon(BaseWeaponComponent newWeapon)
     {
         if (!SetWeaponInSlot(GetFreeSlot(), newWeapon))
         {
@@ -42,13 +48,13 @@ public class ItemsComponent : MonoBehaviour
     }
 
 
-    public GameObject GetCurrentWeapon()
+    public BaseWeaponComponent GetCurrentWeapon()
     {
         return GetWeaponBySlot(CurrentWeapon);
     }
 
 
-    public GameObject GetWeaponBySlot(SlotWeaponEnum inSlot)
+    public BaseWeaponComponent GetWeaponBySlot(SlotWeaponEnum inSlot)
     {
         switch (inSlot)
         {
@@ -91,7 +97,7 @@ public class ItemsComponent : MonoBehaviour
     }
     
 
-    public bool SetWeaponInSlot(SlotWeaponEnum inSlot, GameObject inWeapon)
+    public bool SetWeaponInSlot(SlotWeaponEnum inSlot, BaseWeaponComponent inWeapon)
     {
         switch (inSlot)
         {

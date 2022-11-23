@@ -17,6 +17,7 @@ public class BaseWeaponComponent : MonoBehaviour
     public Transform SpawnShotPoint;
     public ShootingType ShootingType;
     public float FireDelay = 1;
+    public float Damage = 3;
     public int NnumberOfShootInBurst = 3;
 
 

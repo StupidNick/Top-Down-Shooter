@@ -18,7 +18,7 @@ public class RangeWeapon : BaseWeaponComponent
         var bullet = Instantiate(projectile, SpawnShotPoint.position, Quaternion.identity);
 
         Vector3 shootDirection = (PlayerController.GetMousePosition() - SpawnShotPoint.position).normalized;
-        bullet.GetComponent<BaseProjectile>().Initialize(shootDirection, transform.rotation);
+        bullet.GetComponent<BaseProjectile>().Initialize(shootDirection, transform.rotation, Damage);
         base.Shoot();
     }
 }

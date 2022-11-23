@@ -12,6 +12,7 @@ public class BaseProjectile : MonoBehaviour
     private float _mooveSpeed = 500;
     [SerializeField]
     private int _numOfObstacle = 0;
+    private float _damage;
     private Vector3 _shootDirection;
 
 
@@ -19,8 +20,9 @@ public class BaseProjectile : MonoBehaviour
     {
     }
     
-    public void Initialize(Vector3 shootDirection, Quaternion rotation)
+    public void Initialize(Vector3 shootDirection, Quaternion rotation, float damage)
     {
+        _damage = damage;
         _shootDirection = shootDirection;
         transform.rotation = rotation;
         Destroy(gameObject, _lifeTime);
@@ -36,9 +38,13 @@ public class BaseProjectile : MonoBehaviour
     {
         if (collider == null) return;
         
-        if (collider.gameObject.tag == "Enemy")
+        if (collider.gameObject.tag == "CanBeDamaged")
         {
-            //make damage
+            var enemy = collider.GetComponent<HealthComponent>();
+            if (enemy != null)
+            {
+                enemy.MakeDamage(_damage);
+            }
         }
         _numOfObstacle--;
         if (_numOfObstacle < 0)

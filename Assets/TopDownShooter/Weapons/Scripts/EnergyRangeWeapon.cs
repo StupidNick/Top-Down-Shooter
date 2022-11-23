@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class EnergyRangeWeapon : RangeWeapon
 {
-    public EnergyComponent Energy;
+    private EnergyComponent Energy;
     public float EnergyToFire, MaxHeatLevel, HeatingPerShot;
 
     protected float _heatLevel = 0;
     void Start()
     {
-        
+        Energy = gameObject.GetComponentInParent<EnergyComponent>();
     }
 
 
     protected override bool CheckCanShoot()
     {
-        if(isReloading || !canShooting || Time.time < nextShootTimer || _heatLevel >= MaxHeatLevel) return false;
+        if(isReloading || !canShooting || Time.time < nextShootTimer || _heatLevel >= MaxHeatLevel || Energy == null) return false;
 
-        if (Energy.GetEnergy() >= EnergyToFire)
+        if (Energy.Energy >= EnergyToFire)
         {
             return true;
         }
@@ -32,7 +32,6 @@ public class EnergyRangeWeapon : RangeWeapon
         base.Shoot();
         Energy.RemoveEnergy(EnergyToFire);
         _heatLevel += HeatingPerShot;
-        Debug.Log("Heat level: " + _heatLevel);//Debug
     }
 
 

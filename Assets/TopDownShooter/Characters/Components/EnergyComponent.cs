@@ -1,34 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnergyComponent : MonoBehaviour
 {
-    public float initialEnergyLevel;
-    float energy;
+    [SerializeField] private float _maxEnergyLevel;
+    [SerializeField] private float energy;
     
     
     void Start()
     {
-        energy = initialEnergyLevel;
+        energy = _maxEnergyLevel;
+        // gameObject.GetComponent<PlayerController>().AddComponentToDeathList(this);
     }
 
 
     public void RemoveEnergy(float InEnergy)
     {
         energy -= InEnergy;
-        Debug.Log("Energy level: " + energy);
+        if (energy < 0)
+        {
+            energy = 0;
+        }
     }
 
 
     public void RestoreEnergy(float InEnergy)
     {
         energy += InEnergy;
+        if (energy > _maxEnergyLevel)
+        {
+            energy = _maxEnergyLevel;
+        }
     }
 
 
-    public float GetEnergy()
+    public float Energy
     {
-        return energy;
+        get
+        {
+            return energy;
+        }
     }
 }

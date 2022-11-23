@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent (typeof(CharacterController))]
+[RequireComponent (typeof(CharacterController), typeof(HealthComponent))]
 public class PlayerController : MonoBehaviour
 {
     // Handling
@@ -17,16 +17,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
 
     //Components
-    private CharacterController controller;
-    private Camera cam;
-    public ItemsComponent itemsComponent;
+    private CharacterController _controller;
+    private Camera _camera;
+    private ItemsComponent _itemsComponent;
+    private HealthComponent _healthComponent;
+    private List<MonoBehaviour> _deathList;
     
 
     void Start()
     {
         _layerMask = layerMask;
-        controller = GetComponent<CharacterController>();
-        cam = Camera.main;
+        _controller = GetComponent<CharacterController>();
+        _itemsComponent = GetComponent<ItemsComponent>();
+        _healthComponent = GetComponent<HealthComponent>();
+        _camera = Camera.main;
+
+        _healthComponent.Dead += OnPlayerDeath;
+    }
+
+    public void AddComponentToDeathList(MonoBehaviour component)
+    {
+        _deathList.Add(component);
     }
 
     
@@ -36,15 +47,15 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetButton("Shoot"))
         {
-            itemsComponent.GetCurrentWeapon().GetComponent<BaseWeaponComponent>().StartShooting();
+            _itemsComponent.StartShootFromCurrentWeapon();
         }
         if(Input.GetButtonUp("Shoot"))
         {
-            itemsComponent.GetCurrentWeapon().GetComponent<BaseWeaponComponent>().ResetShootingCounter();
+            _itemsComponent.GetCurrentWeapon().ResetShootingCounter();
         }
         if(Input.GetButtonDown("Reload"))
         {
-            itemsComponent.GetCurrentWeapon().GetComponent<BaseWeaponComponent>().StartReload();
+            _itemsComponent.GetCurrentWeapon().StartReload();
         }
     }
 
@@ -52,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private void ControlMouse()
     {
         Vector3 mousePos = Input.mousePosition;
-        mousePos = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.transform.position.y - transform.position.y));
+        mousePos = _camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, _camera.transform.position.y - transform.position.y));
         targetRotation = Quaternion.LookRotation(mousePos - new Vector3(transform.position.x, 0, transform.position.z));
         transform.eulerAngles = Vector3.up * Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, rotationSpeed * Time.deltaTime);
 
@@ -62,7 +73,7 @@ public class PlayerController : MonoBehaviour
         motion *= (Input.GetButton("Run")) ? runSpeed : walkSpeed;
         motion += Vector3.up * -8;
 
-        controller.Move(motion * Time.deltaTime);
+        _controller.Move(motion * Time.deltaTime);
     }
 
     public static Vector3 GetMousePosition()
@@ -73,5 +84,14 @@ public class PlayerController : MonoBehaviour
             return raycastHit.point;
         }
         return new Vector3(0,0,0);
+    }
+
+
+    private void OnPlayerDeath()
+    {
+        foreach (var component in _deathList)
+        {
+            component.enabled = false;
+        }
     }
 }
