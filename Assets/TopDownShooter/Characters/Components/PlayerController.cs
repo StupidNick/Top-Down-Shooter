@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     //System
     private Quaternion targetRotation;
+    private static LayerMask _layerMask; 
+    [SerializeField] private LayerMask layerMask;
 
     //Components
     private CharacterController controller;
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        _layerMask = layerMask;
         controller = GetComponent<CharacterController>();
         cam = Camera.main;
     }
@@ -46,7 +49,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void ControlMouse()
+    private void ControlMouse()
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.transform.position.y - transform.position.y));
@@ -60,5 +63,15 @@ public class PlayerController : MonoBehaviour
         motion += Vector3.up * -8;
 
         controller.Move(motion * Time.deltaTime);
+    }
+
+    public static Vector3 GetMousePosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _layerMask))
+        {
+            return raycastHit.point;
+        }
+        return new Vector3(0,0,0);
     }
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6817880235178084761}
   m_Layer: 0
-  m_Name: spawn
+  m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,11 +42,10 @@ GameObject:
   - component: {fileID: 6817880237184628748}
   - component: {fileID: 6817880237184628747}
   - component: {fileID: 6817880237184628746}
-  - component: {fileID: 6817880237184628749}
   - component: {fileID: 6817880237184628745}
-  - component: {fileID: 1643837854532968332}
+  - component: {fileID: 3693418822309936246}
   m_Layer: 0
-  m_Name: BaseWeapon
+  m_Name: EnergyWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,19 +117,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6817880237184628749
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6817880237184628751}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &6817880237184628745
 AudioSource:
   m_ObjectHideFlags: 0
@@ -227,7 +213,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1643837854532968332
+--- !u!114 &3693418822309936246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -236,10 +222,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6817880237184628751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b48893ea251b257429d15e3366aadb8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 38351a43c0c7f514ea5b2a0a2509f806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnShotPoint: {fileID: 6817880235178084761}
-  shootingType: 0
-  fireDelay: 1
-  numberOfShootInBurst: 3
+  SpawnShotPoint: {fileID: 6817880235178084761}
+  ShootingType: 0
+  FireDelay: 1
+  NnumberOfShootInBurst: 3
+  ReloadTime: 3
+  projectile: {fileID: 0}
+  Energy: {fileID: 0}
+  EnergyToFire: 10
+  MaxHeatLevel: 50
+  HeatingPerShot: 15

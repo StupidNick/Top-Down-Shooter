@@ -1,13 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+
 
 public class EnergyRangeWeapon : RangeWeapon
 {
-    public EnergyComponent energyComponent;
-    public float energyToFire, maxHeatLevel, heatingPerShot;
+    public EnergyComponent Energy;
+    public float EnergyToFire, MaxHeatLevel, HeatingPerShot;
 
-    protected float heatLevel = 0;
+    protected float _heatLevel = 0;
     void Start()
     {
         
@@ -16,13 +17,12 @@ public class EnergyRangeWeapon : RangeWeapon
 
     protected override bool CheckCanShoot()
     {
-        if(isReloading || !canShooting || Time.time < nextShootTimer || energyComponent == null || heatLevel >= maxHeatLevel) return false;
+        if(isReloading || !canShooting || Time.time < nextShootTimer || _heatLevel >= MaxHeatLevel) return false;
 
-        if (energyComponent.GetEnergy() >= energyToFire)
+        if (Energy.GetEnergy() >= EnergyToFire)
         {
             return true;
         }
-        
         return false;
     }
 
@@ -30,17 +30,17 @@ public class EnergyRangeWeapon : RangeWeapon
     protected override void Shoot()
     {
         base.Shoot();
-        energyComponent.RemoveEnergy(energyToFire);
-        heatLevel += heatingPerShot;
-        Debug.Log("Heat level^ " + heatLevel);
+        Energy.RemoveEnergy(EnergyToFire);
+        _heatLevel += HeatingPerShot;
+        Debug.Log("Heat level: " + _heatLevel);//Debug
     }
 
 
     protected override IEnumerator EndReload()
     {
-        yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(ReloadTime);
 
-        heatLevel = 0;
+        _heatLevel = 0;
         isReloading = false;
     }
 }

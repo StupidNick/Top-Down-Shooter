@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class GunshotRangeWeapon : RangeWeapon
 {
-    public int maxAmmoInTheClip = 5;
+    public int MaxAmmoInTheClip = 5;
 
-    protected int ammoInTheClip;
+    protected int _ammoInTheClip;
     void Start()
     {
-        ammoInTheClip = maxAmmoInTheClip;
+        _ammoInTheClip = MaxAmmoInTheClip;
     }
 
 
     public int GetAmmoInTheClip()
     {
-        return ammoInTheClip;
+        return _ammoInTheClip;
     }
 
 
     protected override bool CheckCanShoot()
     {
-        if(isReloading || !canShooting || Time.time < nextShootTimer || ammoInTheClip <= 0) return false;
+        if(isReloading || !canShooting || Time.time < nextShootTimer || _ammoInTheClip <= 0) return false;
         return true;
     }
 
@@ -29,16 +29,16 @@ public class GunshotRangeWeapon : RangeWeapon
     protected override void Shoot()
     {
         base.Shoot();
-        ammoInTheClip--;
-        Debug.Log("Ammo in the clip: " + ammoInTheClip);
+        _ammoInTheClip--;
+        Debug.Log("Ammo in the clip: " + _ammoInTheClip);//Debug
     }
 
 
     protected override IEnumerator EndReload()
     {
-        yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(ReloadTime);
 
-        ammoInTheClip = maxAmmoInTheClip;
+        _ammoInTheClip = MaxAmmoInTheClip;
         isReloading = false;
     }
 }

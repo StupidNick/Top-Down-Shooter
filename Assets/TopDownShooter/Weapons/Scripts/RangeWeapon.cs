@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+
 
 public class RangeWeapon : BaseWeaponComponent
 {
-    public float reloadTime = 3;
-
+    public float ReloadTime = 3;
+    public Transform projectile;
 
     void Start()
     {
@@ -15,16 +15,10 @@ public class RangeWeapon : BaseWeaponComponent
 
     protected override void Shoot() 
     {
-        Ray ray = new Ray(spawnShotPoint.position, spawnShotPoint.forward);
-        RaycastHit hit;
+        var bullet = Instantiate(projectile, SpawnShotPoint.position, Quaternion.identity);
 
-        float shotDistance = 20;
-
-        if(Physics.Raycast(ray, out hit, shotDistance))
-        {
-            shotDistance = hit.distance;
-        }
-        Debug.DrawRay(ray.origin, ray.direction * shotDistance, Color.red, 2);
+        Vector3 shootDirection = (PlayerController.GetMousePosition() - SpawnShotPoint.position).normalized;
+        bullet.GetComponent<BaseProjectile>().Initialize(shootDirection, transform.rotation);
         base.Shoot();
     }
 }

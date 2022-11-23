@@ -14,11 +14,10 @@ public enum ShootingType
 public class BaseWeaponComponent : MonoBehaviour
 {
     //public variables
-    public Transform spawnShotPoint;
-    public ShootingType shootingType;
-    // public EnergyComponent energyComponent; To EnergyRangeComponent
-    public float fireDelay = 1;
-    public int numberOfShootInBurst = 3;
+    public Transform SpawnShotPoint;
+    public ShootingType ShootingType;
+    public float FireDelay = 1;
+    public int NnumberOfShootInBurst = 3;
 
 
     //private variables
@@ -45,17 +44,17 @@ public class BaseWeaponComponent : MonoBehaviour
     {
         if(!CheckCanShoot()) return;
         
-        if(shootingType == ShootingType.single && shootCounter < 1)
+        if(ShootingType == ShootingType.single && shootCounter < 1)
         {
             Shoot();
             return;
         }
-        if(shootingType == ShootingType.burst && numberOfShootInBurst > shootCounter)
+        if(ShootingType == ShootingType.burst && NnumberOfShootInBurst > shootCounter)
         {
             Shoot(); 
             return;
         }
-        if(shootingType == ShootingType.auto)
+        if(ShootingType == ShootingType.auto)
         {
             Shoot();
         }
@@ -64,7 +63,7 @@ public class BaseWeaponComponent : MonoBehaviour
 
     protected virtual void Shoot()
     {
-        nextShootTimer = Time.time + fireDelay;
+        nextShootTimer = Time.time + FireDelay;
         shootCounter++;
         // shotSound.Play();
     }
