@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunshotRangeWeapon : RangeWeapon
+public class FirearmsRangeWeapon : RangeWeapon
 {
     public int MaxAmmoInTheClip = 5;
+    [SerializeField] private Rigidbody _bulletShell;
+    [SerializeField] private Transform _bulletSpawnPosition;
 
     protected int _ammoInTheClip;
     void Start()
@@ -30,6 +32,8 @@ public class GunshotRangeWeapon : RangeWeapon
     {
         base.Shoot();
         _ammoInTheClip--;
+        SpawnBulletShell();
+
         Debug.Log("Ammo in the clip: " + _ammoInTheClip);//Debug
     }
 
@@ -40,5 +44,15 @@ public class GunshotRangeWeapon : RangeWeapon
 
         _ammoInTheClip = MaxAmmoInTheClip;
         isReloading = false;
+    }
+
+
+    private void SpawnBulletShell()
+    {
+        var shell = Instantiate(_bulletShell, _bulletSpawnPosition.position, Quaternion.identity);
+
+        shell.AddForce(_bulletSpawnPosition.forward * Random.Range(15f, 20f));
+        shell.GetComponent<BulletShell>().Initialize(_bulletSpawnPosition.forward, _bulletSpawnPosition.rotation);
+         
     }
 }
