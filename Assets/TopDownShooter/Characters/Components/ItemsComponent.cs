@@ -20,9 +20,14 @@ public struct ConsumebleStruct
 
 public class ItemsComponent : MonoBehaviour
 {
-    public BaseWeaponComponent[] WeaponsArray; 
-    SlotWeaponEnum CurrentWeapon = SlotWeaponEnum.FirstSlot;
-    ConsumebleStruct[] ConsumebleArray;
+    [SerializeField]
+    private BaseWeaponComponent[] WeaponsArray; 
+    [SerializeField]
+    private Transform WeaponPoint; 
+    [SerializeField]
+    private Transform HideWeaponPoint; 
+    SlotWeaponEnum CurrentWeaponSlot = SlotWeaponEnum.EmptySlot;
+    // ConsumebleStruct[] ConsumebleArray;
     int CurrentConsumebleIndex;
 
 
@@ -33,7 +38,16 @@ public class ItemsComponent : MonoBehaviour
 
     public void StartShootFromCurrentWeapon()
     {
+        if (GetCurrentWeapon() == null) return;
+        
         GetCurrentWeapon().StartShooting();
+    }
+    
+    public void ResetShootCounterForCurrentWeapon()
+    {
+        if (GetCurrentWeapon() == null) return;
+        
+        GetCurrentWeapon().ResetShootingCounter();
     }
 
 
@@ -50,7 +64,45 @@ public class ItemsComponent : MonoBehaviour
 
     public BaseWeaponComponent GetCurrentWeapon()
     {
-        return GetWeaponBySlot(CurrentWeapon);
+        return GetWeaponBySlot(CurrentWeaponSlot);
+    }
+
+
+    public void ChangeWeapon(SlotWeaponEnum inSlot)
+    {
+        if (CurrentWeaponSlot != SlotWeaponEnum.EmptySlot)
+        {
+            if (CurrentWeaponSlot == inSlot)
+            {
+                HideWeapon(GetCurrentWeapon());
+                return;
+            }
+            HideWeapon(GetCurrentWeapon());
+        }
+        
+        RaiseWeapon(inSlot);
+    }
+
+
+    private void HideWeapon(BaseWeaponComponent weapon)
+    {
+        if (weapon == null) return;
+        
+        weapon.transform.position = HideWeaponPoint.position;
+        weapon.enabled = false;
+        CurrentWeaponSlot = SlotWeaponEnum.EmptySlot;
+    }
+    
+    
+    private void RaiseWeapon(SlotWeaponEnum inSlot)
+    {
+        BaseWeaponComponent weapon = GetWeaponBySlot(inSlot);
+        if (weapon == null) return;
+        
+        weapon.transform.position = WeaponPoint.position;
+        weapon.enabled = true;
+        CurrentWeaponSlot = inSlot;
+        Debug.Log("Now active slot is: " + inSlot);//Debug
     }
 
 
@@ -65,9 +117,9 @@ public class ItemsComponent : MonoBehaviour
             case SlotWeaponEnum.ThirdSlot:
                 return WeaponsArray[2];
             case SlotWeaponEnum.EmptySlot:
-                return WeaponsArray[3];
+                return null;
             default:
-                return WeaponsArray[0];
+                return null;
         }
     }
     
@@ -88,12 +140,12 @@ public class ItemsComponent : MonoBehaviour
                     case 2:
                         return SlotWeaponEnum.ThirdSlot;
                     default:
-                        return CurrentWeapon;
+                        return CurrentWeaponSlot;
                 }
             }
             counter++;
         }
-        return CurrentWeapon;
+        return CurrentWeaponSlot;
     }
     
 

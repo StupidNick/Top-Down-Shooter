@@ -51,12 +51,24 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetButtonUp("Shoot"))
         {
-            _itemsComponent.GetCurrentWeapon().ResetShootingCounter();
+            _itemsComponent.ResetShootCounterForCurrentWeapon();
         }
         if(Input.GetButtonDown("Reload"))
         {
             _itemsComponent.GetCurrentWeapon().StartReload();
         }
+        if(Input.GetButtonDown("ChoiceFirstWeapon"))
+        {
+            _itemsComponent.ChangeWeapon(SlotWeaponEnum.FirstSlot);
+        }
+        if(Input.GetButtonDown("ChoiceSecondWeapon"))
+        {
+            _itemsComponent.ChangeWeapon(SlotWeaponEnum.SecondSlot);
+        }
+        // if(Input.GetButtonDown("ChoiceThirdWeapon"))
+        // {
+        //     _itemsComponent.ChangeWeapon(SlotWeaponEnum.ThirdSlot);
+        // }
     }
 
 
