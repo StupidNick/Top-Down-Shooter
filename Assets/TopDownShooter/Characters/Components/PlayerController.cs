@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private Quaternion targetRotation;
     private static LayerMask _layerMask; 
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private Transform _viewPoint;
+    [SerializeField] private float _angleOfFOV, _lengthOfView; 
 
     //Components
     private CharacterController _controller;
@@ -22,6 +24,8 @@ public class PlayerController : MonoBehaviour
     private ItemsComponent _itemsComponent;
     private HealthComponent _healthComponent;
     private List<MonoBehaviour> _deathList;
+    private MeshRenderComponent[] _hiddenObjects;
+
     
 
     void Start()
@@ -31,6 +35,8 @@ public class PlayerController : MonoBehaviour
         _itemsComponent = GetComponent<ItemsComponent>();
         _healthComponent = GetComponent<HealthComponent>();
         _camera = Camera.main;
+
+        _hiddenObjects = FindObjectsOfType<MeshRenderComponent>();
 
         _healthComponent.Dead += OnPlayerDeath;
     }
@@ -69,6 +75,24 @@ public class PlayerController : MonoBehaviour
         // {
         //     _itemsComponent.ChangeWeapon(SlotWeaponEnum.ThirdSlot);
         // }
+
+        UpdateFieldOfView();
+    }
+
+
+    private void UpdateFieldOfView()
+    {
+        if (_hiddenObjects.Length == 0) return;
+
+        foreach (var obj in _hiddenObjects)
+        {
+            if (!obj.CheckCanSee(_viewPoint, _angleOfFOV, _lengthOfView))
+            {
+                obj.FadeOutObject();
+                continue;
+            }
+            obj.FadeInObject();
+        }
     }
 
 

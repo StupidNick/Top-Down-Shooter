@@ -5,7 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
-  - CanBeDamaged
+  - Impenetrable
+  - HiddenObject
   layers:
   - Default
   - TransparentFX

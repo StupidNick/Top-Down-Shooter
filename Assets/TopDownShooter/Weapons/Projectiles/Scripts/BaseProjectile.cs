@@ -37,15 +37,22 @@ public class BaseProjectile : MonoBehaviour
     private void OnTriggerEnter(Collider collider) 
     {
         if (collider == null) return;
-        
-        if (collider.gameObject.tag == "CanBeDamaged")
+        if (collider.tag == "Impenetrable")
         {
-            var enemy = collider.GetComponent<HealthComponent>();
-            if (enemy != null)
-            {
-                enemy.MakeDamage(_damage);
-            }
+            Destroy(gameObject);
         }
+        var health = collider.GetComponent<HealthComponent>();
+
+        if (health != null)
+        {
+            health.MakeDamage(_damage);
+        }
+        DecrementObstacleCounter();
+    }
+
+
+    private void DecrementObstacleCounter()
+    {
         _numOfObstacle--;
         if (_numOfObstacle < 0)
         {

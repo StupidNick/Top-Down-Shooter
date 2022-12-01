@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lifeTime: 3
   _mooveSpeed: 10
-  _numOfObstacle: 0
+  _numOfObstacle: 2
 --- !u!54 &1607661753223362186
 Rigidbody:
   m_ObjectHideFlags: 0
