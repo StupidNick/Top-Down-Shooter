@@ -8,16 +8,10 @@ public class FirearmsRangeWeapon : RangeWeapon
     [SerializeField] private Rigidbody _bulletShell;
     [SerializeField] private Transform _bulletSpawnPosition;
 
-    protected int _ammoInTheClip;
-    void Start()
+    protected void Start()
     {
+        base.Start();
         _ammoInTheClip = MaxAmmoInTheClip;
-    }
-
-
-    public int GetAmmoInTheClip()
-    {
-        return _ammoInTheClip;
     }
 
 

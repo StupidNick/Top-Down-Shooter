@@ -84,6 +84,8 @@ public class HealthComponent : MonoBehaviour
 
     private void Death()
     {
+        //Play death animation
+        //Make death widget
         Dead?.Invoke();
     }
 }

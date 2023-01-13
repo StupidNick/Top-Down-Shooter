@@ -19,6 +19,7 @@ public class BaseWeaponComponent : MonoBehaviour
     public float FireDelay = 1;
     public float Damage = 3;
     public int NnumberOfShootInBurst = 3;
+    public float ReloadTime = 3;
 
 
     //private variables
@@ -27,11 +28,21 @@ public class BaseWeaponComponent : MonoBehaviour
     protected bool canShooting = true;
     protected float nextShootTimer;
     protected int shootCounter = 0;
+    protected Transform Owner;
+    protected int _ammoInTheClip;
     
 
-    void Start()
+    protected void Start()
     {
         shotSound = GetComponent<AudioSource>();
+        Owner = transform.parent;
+        Debug.Log("Owner: " + Owner.name);
+    }
+
+
+    public int GetAmmoInTheClip()
+    {
+        return _ammoInTheClip;
     }
     
 
