@@ -1,6 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine;
+
+
+
+[System.Serializable]
+public class ImageEvent : UnityEvent<Sprite>
+{
+}
 
 
 public enum SlotWeaponEnum
@@ -18,6 +25,8 @@ public struct ConsumebleStruct
     int ConsumableCounter;
 }
 
+
+
 public class ItemsComponent : MonoBehaviour
 {
     [SerializeField]
@@ -30,9 +39,13 @@ public class ItemsComponent : MonoBehaviour
     // ConsumebleStruct[] ConsumebleArray;
     int CurrentConsumebleIndex;
 
+    public ImageEvent OnWeaponChanged;
+    public Sprite NoWeaponIcon;
+
 
     public void Start()
     {
+        OnWeaponChanged?.Invoke(NoWeaponIcon);
     }
 
 
@@ -75,12 +88,14 @@ public class ItemsComponent : MonoBehaviour
             if (CurrentWeaponSlot == inSlot)
             {
                 HideWeapon(GetCurrentWeapon());
+                OnWeaponChanged?.Invoke(NoWeaponIcon);
                 return;
             }
             HideWeapon(GetCurrentWeapon());
         }
         
         RaiseWeapon(inSlot);
+        OnWeaponChanged?.Invoke(GetCurrentWeapon().Icon);
     }
 
 

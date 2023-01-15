@@ -6,11 +6,14 @@ using UnityEngine;
 public class EnergyRangeWeapon : RangeWeapon
 {
     private EnergyComponent Energy;
+    public FloatEvent OnHeatChanged;
     public float EnergyToFire, MaxHeatLevel, HeatingPerShot;
 
     protected float _heatLevel = 0;
     void Start()
     {
+        OnHeatChanged?.Invoke(_heatLevel);
+        base.Start();
         Energy = gameObject.GetComponentInParent<EnergyComponent>();
     }
 
@@ -32,6 +35,7 @@ public class EnergyRangeWeapon : RangeWeapon
         base.Shoot();
         Energy.RemoveEnergy(EnergyToFire);
         _heatLevel += HeatingPerShot;
+        OnHeatChanged?.Invoke(_heatLevel);
     }
 
 
@@ -40,6 +44,7 @@ public class EnergyRangeWeapon : RangeWeapon
         yield return new WaitForSeconds(ReloadTime);
 
         _heatLevel = 0;
+        OnHeatChanged?.Invoke(_heatLevel);
         isReloading = false;
     }
 }

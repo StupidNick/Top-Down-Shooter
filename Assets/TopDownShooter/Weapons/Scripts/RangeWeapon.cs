@@ -10,11 +10,12 @@ public class RangeWeapon : BaseWeaponComponent
 
     protected override void Shoot() 
     {
+        base.Shoot();
         if (Owner == null) return;
         Transform bullet = Instantiate(projectile, SpawnShotPoint.position, Quaternion.identity);
 
-        PlayerController ownewPlayer = Owner.GetComponent<PlayerController>();
-        if (ownewPlayer != null)
+        PlayerController ownerPlayer = Owner.GetComponent<PlayerController>();
+        if (ownerPlayer != null)
         {
             Vector3 shootDirection = (PlayerController.GetMousePosition() - SpawnShotPoint.position).normalized;
             bullet.GetComponent<BaseProjectile>().Initialize(shootDirection, transform.rotation, Damage);
@@ -26,8 +27,6 @@ public class RangeWeapon : BaseWeaponComponent
             Vector3 shootDirection = (target - SpawnShotPoint.position).normalized;
             bullet.GetComponent<BaseProjectile>().Initialize(shootDirection, transform.rotation, Damage);
         }
-    
         
-        base.Shoot();
     }
 }

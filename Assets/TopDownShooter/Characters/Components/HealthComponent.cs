@@ -1,16 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using System;
+
+
+[System.Serializable]
+public class FloatEvent : UnityEvent<float>
+{
+
+}
+
 
 public class HealthComponent : MonoBehaviour
 {
     public event Action Dead;
-    public event Action<float> HealthChanged;
-    public event Action<float> ArmorChanged;
+    public FloatEvent OnHealthChanged;
+    public FloatEvent ArmorChanged;
     [SerializeField] private float  _health, _maxHealth, _armor, _maxArmor, _armorSavePercent;
     void Start()
     {
+        OnHealthChanged?.Invoke(_health);
         // var player = gameObject.GetComponent<PlayerController>();
         // if (player != null)
         // {
@@ -44,29 +52,29 @@ public class HealthComponent : MonoBehaviour
         {
             _health = _maxHealth;
         }
-        HealthChanged?.Invoke(_health);
+        OnHealthChanged?.Invoke(_health);
     }
 
 
     private void RemoveHealth(float health)
     {
         _health -= health;
+        OnHealthChanged?.Invoke(_health);
         if (_health <= 0)
         {
             Death();
         }
-        HealthChanged?.Invoke(_health);
     }
 
 
     private void RestoreArmor(float health)
     {
         _armor += health;
+        ArmorChanged?.Invoke(_armor);
         if (_armor > _maxArmor)
         {
             _armor = _maxArmor;
         }
-        ArmorChanged?.Invoke(_armor);
     }
 
     

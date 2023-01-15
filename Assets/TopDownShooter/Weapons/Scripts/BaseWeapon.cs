@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 
@@ -20,6 +20,7 @@ public class BaseWeaponComponent : MonoBehaviour
     public float Damage = 3;
     public int NnumberOfShootInBurst = 3;
     public float ReloadTime = 3;
+    public Sprite Icon;
 
 
     //private variables
@@ -36,7 +37,6 @@ public class BaseWeaponComponent : MonoBehaviour
     {
         shotSound = GetComponent<AudioSource>();
         Owner = transform.parent;
-        Debug.Log("Owner: " + Owner.name);
     }
 
 
@@ -76,6 +76,7 @@ public class BaseWeaponComponent : MonoBehaviour
     protected virtual void Shoot()
     {
         nextShootTimer = Time.time + FireDelay;
+        Debug.Log("nextShootTimer: " + nextShootTimer);
         shootCounter++;
         // shotSound.Play();
     }

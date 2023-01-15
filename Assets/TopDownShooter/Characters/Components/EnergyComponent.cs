@@ -5,34 +5,39 @@ using System;
 
 public class EnergyComponent : MonoBehaviour
 {
+    public FloatEvent OnEnergyChanged;
     [SerializeField] private float _maxEnergyLevel;
-    [SerializeField] private float energy;
+    [SerializeField] private float _energy;
     
     
     void Start()
     {
-        energy = _maxEnergyLevel;
+        _energy = _maxEnergyLevel;
+        OnEnergyChanged?.Invoke(_energy);
         // gameObject.GetComponent<PlayerController>().AddComponentToDeathList(this);
     }
 
 
     public void RemoveEnergy(float InEnergy)
     {
-        energy -= InEnergy;
-        if (energy < 0)
+        _energy -= InEnergy;
+        Debug.Log("Energy: " + _energy);
+        if (_energy < 0)
         {
-            energy = 0;
+            _energy = 0;
         }
+        OnEnergyChanged?.Invoke(_energy);
     }
 
 
     public void RestoreEnergy(float InEnergy)
     {
-        energy += InEnergy;
-        if (energy > _maxEnergyLevel)
+        _energy += InEnergy;
+        if (_energy > _maxEnergyLevel)
         {
-            energy = _maxEnergyLevel;
+            _energy = _maxEnergyLevel;
         }
+        OnEnergyChanged?.Invoke(_energy);
     }
 
 
@@ -40,7 +45,7 @@ public class EnergyComponent : MonoBehaviour
     {
         get
         {
-            return energy;
+            return _energy;
         }
     }
 }
