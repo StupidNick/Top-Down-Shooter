@@ -26,7 +26,10 @@ public class MeshRenderComponent : MonoBehaviour
         if (_isVisible == false) return;
         
         _isVisible = false;
-        StartCoroutine(FadeOut());
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine(FadeOut());
+        }
     }
     
     public void FadeInObject()

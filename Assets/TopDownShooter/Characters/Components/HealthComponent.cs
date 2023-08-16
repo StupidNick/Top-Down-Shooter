@@ -3,18 +3,11 @@ using UnityEngine;
 using System;
 
 
-[System.Serializable]
-public class FloatEvent : UnityEvent<float>
-{
-
-}
-
-
 public class HealthComponent : MonoBehaviour
 {
-    public event Action Dead;
-    public FloatEvent OnHealthChanged;
-    public FloatEvent ArmorChanged;
+    public UnityEvent Dead;
+    public UnityEvent<float> OnHealthChanged;
+    public UnityEvent<float> ArmorChanged;
     [SerializeField] private float  _health, _maxHealth, _armor, _maxArmor, _armorSavePercent;
     void Start()
     {

@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
         _hiddenObjects = FindObjectsOfType<MeshRenderComponent>();
 
-        _healthComponent.Dead += OnPlayerDeath;
+        // _healthComponent.Dead += OnPlayerDeath;
     }
 
     public void AddComponentToDeathList(MonoBehaviour component)

@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using System;
 
 public class EnergyComponent : MonoBehaviour
 {
-    public FloatEvent OnEnergyChanged;
+    public UnityEvent<float> OnEnergyChanged;
     [SerializeField] private float _maxEnergyLevel;
     [SerializeField] private float _energy;
     

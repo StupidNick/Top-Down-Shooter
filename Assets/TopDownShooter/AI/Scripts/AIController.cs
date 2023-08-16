@@ -34,6 +34,7 @@ public class AIController : MonoBehaviour
     private float _elapsed = 0.0f; // Update frequency
     private bool _canAttack = true;
     private bool _seeEnemy = false;
+    [SerializeField] private float minX, maxX, minZ, maxZ = 0;
 
 
     private void Awake()
@@ -46,11 +47,6 @@ public class AIController : MonoBehaviour
         _healthComponent = GetComponent<HealthComponent>();
 
         _currentAIState = AIState.Patrol;
-
-        if (_healthComponent != null)
-        {
-            _healthComponent.Dead += OnDead;
-        }
     }
 
 
@@ -71,7 +67,6 @@ public class AIController : MonoBehaviour
         _enemyInfo._enemyTarget = target;
         _enemyInfo._lastTargetPosition = target.transform.position;
         _currentAIState = AIState.Attack;
-        // Debug.DrawLine(_enemyInfo._lastTargetPosition, _enemyInfo._lastTargetPosition*2, Color.blue, 2);
     }
 
 
@@ -100,19 +95,22 @@ public class AIController : MonoBehaviour
     private void Search()
     {
         _patrolTargetPostion = _enemyInfo._lastTargetPosition;
+        Debug.Log("Searching");
         if (!CheckNPCAroundTarget())
         {
-            GoToPosition(_patrolTargetPostion);
+            _navMeshAgent.isStopped = false;
+            GoToPosition(_enemyInfo._lastTargetPosition);
+            Debug.DrawRay(_patrolTargetPostion, transform.position.normalized, Color.blue, 5);
             return;
         }
         _currentAIState = AIState.Patrol;
-        // Patrol();
+        Patrol();
     }
     
     
     private void Patrol()
     {
-        _patrolTargetPostion = GetRandomPositionInRadius(transform.position, _patrolRadius);
+        _patrolTargetPostion = GetRandomPoint();
         GoToPosition(_patrolTargetPostion);
     }
 
@@ -121,9 +119,18 @@ public class AIController : MonoBehaviour
     {
         if (Vector3.Distance(_patrolTargetPostion, transform.position) <= _reachableDistance)
         {
+            Debug.Log("Around target");
             return true;
         }
         return false;
+    }
+
+
+    private Vector3 GetRandomPoint()
+    {
+        float rx = Random.Range(minX, maxX);
+        float rz = Random.Range(minZ, maxZ);
+        return new Vector3(rx, 0, rz);
     }
     
     
@@ -133,7 +140,7 @@ public class AIController : MonoBehaviour
         NavMeshPath path = new NavMeshPath();
         do
         {
-            float distance = Random.Range(0, radius);
+            float distance = Random.Range(_reachableDistance, radius);
             Vector3 direction = Random.insideUnitSphere.normalized;
             point = direction * distance;
         }
@@ -151,7 +158,8 @@ public class AIController : MonoBehaviour
     
     private void StopMoving()
     {
-        _navMeshAgent.destination = transform.position;
+        _patrolTargetPostion = transform.position;
+        _navMeshAgent.isStopped = true;
     }
 
 
@@ -219,7 +227,7 @@ public class AIController : MonoBehaviour
     }
 
 
-    private void OnDead()
+    public void OnDead()
     {
         GetComponent<Renderer>().enabled = false;
         gameObject.SetActive(false);

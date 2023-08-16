@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 
 public class EnergyRangeWeapon : RangeWeapon
 {
     private EnergyComponent Energy;
-    public FloatEvent OnHeatChanged;
+    public UnityEvent<float> OnHeatChanged;
     public float EnergyToFire, MaxHeatLevel, HeatingPerShot;
 
     protected float _heatLevel = 0;
